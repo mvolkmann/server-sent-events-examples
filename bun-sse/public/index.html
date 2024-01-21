@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SSE Demo</title>
+    <script>
+      const eventSource = new EventSource('http://localhost:3000/sse');
+      eventSource.onmessage = event => {
+        const {data, origin, timestamp} = event;
+        console.log(data);
+        // if (data.endsWith('5')) eventSource.close();
+      };
+      eventSource.onerror = error => {
+        console.error('error =', error);
+      };
+    </script>
+  </head>
+  <body>
+    <h1>Server-Sent Events Demo</h1>
+    <p>See output in DevTools Console.</p>
+  </body>
+</html>
