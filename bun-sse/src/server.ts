@@ -10,8 +10,10 @@ app.get("/greet", (c: Context) => {
 });
 
 app.get("/sse", (c: Context) => {
+  console.log("server.ts /sse: entered");
+  let count = 0;
+  // const res = streamSSE(c, async (stream) => {
   return streamSSE(c, async (stream) => {
-    let count = 0;
     while (count < 10) {
       count++;
 
@@ -23,15 +25,18 @@ app.get("/sse", (c: Context) => {
     }
   });
 
+  // console.log("server.ts sse: res =", res);
+
   /*
   // This is invoked when the client calls close on the EventSource.
-  // TODO: FIX THIS!  Do you need to capture the streamSSE return value?
-  const { res } = c;
-  res.socket.on("close", () => {
-    console.log("server.js: got close event");
-    res.end();
+  //res.socket.on("close", () => {
+  c.req.raw.signal.addEventListener("abort", () => {
+    console.log("got abort event");
+    //res.end();
   });
   */
+
+  // return res;
 });
 
 export default app;

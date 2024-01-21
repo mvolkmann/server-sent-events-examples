@@ -7,7 +7,7 @@
       eventSource.onmessage = event => {
         const {data, origin, timestamp} = event;
         console.log(data);
-        // if (data.endsWith('5')) eventSource.close();
+        if (data.endsWith('5')) eventSource.close();
       };
       eventSource.onerror = error => {
         console.error('error =', error);

@@ -25,9 +25,10 @@ app.get('/sse', (req, res) => {
 
     // Must use res.write instead of res.send
     // so the connection will remain open.
-    res.write(`event: count\n`); // optional
+    // TODO: Why does the next line break the demo?
+    // res.write('event: count\n'); // optional
     res.write(`id: ${uuidv4()}\n`); // optional
-    res.write(`data: ${count}\n\n`);
+    res.write(`data: ${count}\n\n`); // double newline triggers sending
   }
 
   // This is invoked when the client calls close on the EventSource.
