@@ -1,4 +1,5 @@
-import { Context, Hono } from "hono";
+import { Hono } from "hono";
+import type { Context } from "hono";
 import { serveStatic } from "hono/bun";
 import { streamSSE } from "hono/streaming";
 
@@ -14,9 +15,10 @@ app.get("/sse", (c: Context) => {
     // This should be invoked when the client calls close on the EventSource,
     // but it is not!
     // TODO: See https://github.com/honojs/hono/issues/1770.
-    c.req.raw.signal.addEventListener("abort", () => {
-      console.log("got abort event");
-      // TODO: How can the connection be closed?
+    console.log("calling onAbort");
+    stream.onAbort(() => {
+      // TODO: Why is this never called?
+      console.log("aborted");
     });
 
     await stream.writeSSE({ data: "starting" });
