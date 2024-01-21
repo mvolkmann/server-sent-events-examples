@@ -5,10 +5,9 @@
     <script>
       const eventSource = new EventSource("http://localhost:3000/sse");
       eventSource.onmessage = (event) => {
-        // TODO: Why is this code never run?
         const { data, origin, timestamp } = event;
         console.log(data);
-        // if (data.endsWith('5')) eventSource.close();
+        if (data.endsWith("5")) eventSource.close();
       };
       eventSource.onerror = (error) => {
         console.error("error =", error);
