@@ -10,6 +10,10 @@ app.get('/greet', (req, res) => {
 
 app.get('/sse', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
+
+  // The event name defaults to "message".
+  res.write(`data: starting\n\n`); // double newline triggers sending
+
   let count = 0;
   while (count < 10) {
     count++;
@@ -23,12 +27,17 @@ app.get('/sse', (req, res) => {
     }
     */
 
-    // Must use res.write instead of res.send
+    // Use res.write instead of res.send
     // so the connection will remain open.
-    // TODO: Why does the next line break the demo?
-    // res.write('event: count\n'); // optional
-    res.write(`id: ${uuidv4()}\n`); // optional
-    res.write(`data: ${count}\n\n`); // double newline triggers sending
+    // Specifying an event name and message id are optional.
+    // We are overriding the default event name of "message"
+    // and specifying the custom event name "count".
+    // It doesn't matter what order the following calls are made,
+    // but each must end in a newline and
+    // the last one must have an extra newline.
+    res.write('event: count\n');
+    res.write(`id: ${uuidv4()}\n`);
+    res.write(`data: ${count}\n\n`);
   }
 
   // This is invoked when the client calls close on the EventSource.
