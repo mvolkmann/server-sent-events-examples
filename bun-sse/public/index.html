@@ -3,26 +3,26 @@
   <head>
     <title>SSE Demo</title>
     <script>
-      const eventSource = new EventSource("http://localhost:3000/sse");
+      const eventSource = new EventSource('http://localhost:3000/sse');
 
       // This listens for events that do not have a custom event name.
-      eventSource.onmessage = (event) => {
-        const { data, origin, timestamp } = event;
+      eventSource.onmessage = event => {
+        const {data, origin, timestamp} = event;
         console.log(data);
       };
 
       // This listens for events with the custom name "count".
-      eventSource.addEventListener("count", (event) => {
-        const { data, origin, timestamp } = event;
+      eventSource.addEventListener('count', event => {
+        const {data, origin, timestamp} = event;
         console.log(data);
-        if (data.endsWith("5")) {
-          console.log("closing eventSource");
+        if (data.endsWith('5')) {
+          console.log('closing eventSource');
           eventSource.close();
         }
       });
 
-      eventSource.onerror = (error) => {
-        console.error("error =", error);
+      eventSource.onerror = error => {
+        console.error('error =', error);
       };
     </script>
   </head>
