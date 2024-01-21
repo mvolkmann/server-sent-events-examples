@@ -30,7 +30,7 @@ app.get("/sse", (c: Context) => {
       await stream.writeSSE({
         event: "count",
         id: String(crypto.randomUUID()),
-        data: String(count), // TODO: Is this required to be a string?
+        data: String(count),
       });
     }
   });
