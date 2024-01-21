@@ -19,14 +19,15 @@ app.get("/sse", (c: Context) => {
       // TODO: How can the connection be closed?
     });
 
+    await stream.writeSSE({ data: "starting" });
+
     let count = 0;
     while (count < 10) {
       count++;
 
       await stream.writeSSE({
-        // TODO: Why does the next line trigger an error?
-        // event: "count", // optional
-        id: String(crypto.randomUUID()), // optional
+        event: "count",
+        id: String(crypto.randomUUID()),
         data: String(count), // TODO: Is this required to be a string?
       });
     }
