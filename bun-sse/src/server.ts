@@ -10,8 +10,15 @@ app.get("/greet", (c: Context) => {
 });
 
 app.get("/sse", (c: Context) => {
-  // const res = streamSSE(c, async (stream) => {
   return streamSSE(c, async (stream) => {
+    // This should be invoked when the client calls close on the EventSource,
+    // but it is not!
+    // TODO: See https://github.com/honojs/hono/issues/1770.
+    c.req.raw.signal.addEventListener("abort", () => {
+      console.log("got abort event");
+      // TODO: How can the connection be closed?
+    });
+
     let count = 0;
     while (count < 10) {
       count++;
@@ -24,17 +31,6 @@ app.get("/sse", (c: Context) => {
       });
     }
   });
-
-  // console.log("server.ts sse: res =", res);
-
-  // This is invoked when the client calls close on the EventSource.
-  //res.socket.on("close", () => {
-  c.req.raw.signal.addEventListener("abort", () => {
-    console.log("got abort event");
-    //res.end();
-  });
-
-  // return res;
 });
 
 export default app;
