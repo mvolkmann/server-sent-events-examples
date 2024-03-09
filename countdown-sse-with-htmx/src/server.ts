@@ -8,32 +8,29 @@ const app = new Hono();
 // The default port is 3000.
 app.use('/*', serveStatic({root: './public'}));
 
+let number = 5;
+
+app.post('/start', async (c: Context) => {
+  // number = Number(c.req.query('start'));
+  const formData = await c.req.formData();
+  number = Number(formData.get('start'));
+  console.log('server.ts /start: number =', number);
+  return c.body(null);
+});
+
 app.get('/countdown', (c: Context) => {
-  console.log('server.ts /countdown: entered');
-  const start = c.req.query('start');
-
   return streamSSE(c, async stream => {
-    let n = Number(start);
-    if (isNaN(n)) {
-      await stream.writeSSE({
-        event: 'error',
-        data: 'start query parameter must be a number'
-      });
-      return;
+    while (true) {
+      if (number >= 0) {
+        await stream.writeSSE({
+          event: 'count',
+          id: String(crypto.randomUUID()),
+          data: String(number) // must be a string
+        });
+        number--;
+      }
+      await stream.sleep(1000); // wait one second between each message
     }
-
-    while (n >= 0) {
-      console.log('server.ts: sending event for', n);
-      await stream.writeSSE({
-        event: 'count',
-        data: String(n) // must be a string
-      });
-      await Bun.sleep(1000); // wait one second between each message
-      n--;
-    }
-
-    stream.close();
-    console.log('server.ts: closed stream');
   });
 });
 
