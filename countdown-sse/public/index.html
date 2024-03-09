@@ -6,6 +6,7 @@
     <script>
       let countdown, eventSource;
 
+      // This is called every time the form is submitted.
       function connect(event) {
         event.preventDefault(); // prevents form submission
         countdown.innerHTML = ''; // clears output area
