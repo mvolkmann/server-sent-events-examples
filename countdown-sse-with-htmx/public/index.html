@@ -9,13 +9,14 @@
   </head>
   <script>
     function reset(event) {
-      event.target.reset();
+      event.target.reset(); // resets the form
+      // Clear the div with id "countdown".
       document.getElementById('countdown').innerHTML = '';
     }
   </script>
   <body>
     <h1>SSE Demo</h1>
-    <form hx-post="/start" hx-on::before-request="reset(event)" hx-swap="none">
+    <form hx-get="/start" hx-on::before-request="reset(event)" hx-swap="none">
       <label>
         Start:
         <input name="start" type="number" required />

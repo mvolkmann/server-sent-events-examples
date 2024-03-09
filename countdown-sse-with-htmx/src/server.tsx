@@ -10,11 +10,9 @@ app.use('/*', serveStatic({root: './public'}));
 
 let number = -1;
 
-app.post('/start', async (c: Context) => {
-  // number = Number(c.req.query('start'));
-  const formData = await c.req.formData();
-  number = Number(formData.get('start'));
-  console.log('server.ts /start: number =', number);
+// This resets the number variable.
+app.get('/start', (c: Context) => {
+  number = Number(c.req.query('start'));
   return c.body(null);
 });
 
@@ -30,7 +28,8 @@ app.get('/countdown', (c: Context) => {
         });
         number--;
       }
-      await stream.sleep(1000); // wait one second between each message
+      // Wait one second between each message.
+      await stream.sleep(1000);
     }
   });
 });
