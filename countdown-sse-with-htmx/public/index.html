@@ -9,7 +9,11 @@
   </head>
   <body>
     <h1>SSE Demo</h1>
-    <form hx-post="/start" hx-on::after-request="event.target.reset()">
+    <form
+      hx-post="/start"
+      hx-on::after-request="event.target.reset()"
+      hx-swap="none"
+    >
       <label>
         Start:
         <input name="start" type="number" required />
@@ -21,6 +25,7 @@
       sse-connect="/countdown"
       sse-swap="count"
       hx-target="#countdown"
+      hx-swap="beforeend"
     >
       <div id="countdown"></div>
     </div>

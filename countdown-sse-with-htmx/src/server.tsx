@@ -8,7 +8,7 @@ const app = new Hono();
 // The default port is 3000.
 app.use('/*', serveStatic({root: './public'}));
 
-let number = 5;
+let number = 10;
 
 app.post('/start', async (c: Context) => {
   // number = Number(c.req.query('start'));
@@ -22,10 +22,11 @@ app.get('/countdown', (c: Context) => {
   return streamSSE(c, async stream => {
     while (true) {
       if (number >= 0) {
+        const jsx = <div>{number}</div>;
         await stream.writeSSE({
           event: 'count',
           id: String(crypto.randomUUID()),
-          data: String(number) // must be a string
+          data: jsx.toString()
         });
         number--;
       }
