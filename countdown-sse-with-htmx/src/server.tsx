@@ -8,7 +8,7 @@ const app = new Hono();
 // The default port is 3000.
 app.use('/*', serveStatic({root: './public'}));
 
-let number = 10;
+let number = -1;
 
 app.post('/start', async (c: Context) => {
   // number = Number(c.req.query('start'));

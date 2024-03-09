@@ -7,13 +7,15 @@
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
   </head>
+  <script>
+    function reset(event) {
+      event.target.reset();
+      document.getElementById('countdown').innerHTML = '';
+    }
+  </script>
   <body>
     <h1>SSE Demo</h1>
-    <form
-      hx-post="/start"
-      hx-on::after-request="event.target.reset()"
-      hx-swap="none"
-    >
+    <form hx-post="/start" hx-on::before-request="reset(event)" hx-swap="none">
       <label>
         Start:
         <input name="start" type="number" required />
