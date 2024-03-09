@@ -13,6 +13,7 @@ app.get('/countdown', (c: Context) => {
 
   return streamSSE(c, async stream => {
     let n = Number(start);
+    // Verify that query parameter could be converted to a number.
     if (isNaN(n)) {
       await stream.writeSSE({
         event: 'error',
