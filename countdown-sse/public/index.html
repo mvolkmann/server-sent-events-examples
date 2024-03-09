@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SSE Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      let countdown, eventSource;
+
+      function connect(event) {
+        event.preventDefault(); // prevents form submission
+        countdown.innerHTML = ''; // clears output area
+
+        // If we have an existing SSE connection, close it.
+        if (eventSource) eventSource.close();
+
+        // Create a new SSE connection.
+        const input = document.querySelector('input');
+        eventSource = new EventSource(
+          'http://localhost:3000/countdown?start=' + input.value
+        );
+
+        event.target.reset(); // clears the form
+
+        // Listen for events with the name "count".
+        eventSource.addEventListener('count', event => {
+          const number = event.data;
+          const div = document.createElement('div');
+          div.textContent = number;
+          countdown.appendChild(div);
+
+          // If we have reached the end, close the SSE connection.
+          if (number === '0') eventSource.close();
+        });
+
+        // Listen for events with the name "error".
+        eventSource.addEventListener('error', event => {
+          countdown.textContent = event.data;
+          eventSource.close();
+        });
+      }
+
+      window.onload = () => {
+        countdown = document.getElementById('countdown');
+      };
+    </script>
+  </head>
+  <body>
+    <h1>SSE Demo</h1>
+    <div>
+      <form onsubmit="connect(event)">
+        <label>
+          Start:
+          <input name="start" type="number" required />
+        </label>
+        <button>Submit</button>
+      </form>
+      <div id="countdown"></div>
+    </div>
+  </body>
+</html>
