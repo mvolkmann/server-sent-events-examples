@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SSE Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
+    <script>
+      function handleSubmit(event, data) {
+        event.preventDefault(); // prevents form submission
+
+        const input = document.querySelector('input');
+        data.start = input.value;
+        console.log('index.html handleSubmit: data.start =', data.start);
+        data.sseUrl = '/countdown?start=' + data.start;
+        console.log('index.html handleSubmit: data.sseUrl =', data.sseUrl);
+
+        // const countdown = document.getElementById('countdown');
+        // countdown.innerHTML = ''; // clears output area
+
+        event.target.reset(); // clears the form
+
+        setTimeout(() => {
+          console.log('handleSubmit: calling htmx.process');
+          console.log('index.html setTimeout: htmx =', htmx);
+          htmx.process(document.body);
+        }, 1000);
+      }
+    </script>
+  </head>
+  <body x-data="{sseUrl: '', start: ''}">
+    <h1>SSE Demo</h1>
+    <form @submit="handleSubmit(event, $data)">
+      <label>
+        Start:
+        <input name="start" type="number" required />
+      </label>
+      <button>Submit</button>
+    </form>
+    <template x-if="start !== ''">
+      <div>start = <span x-text="start"></span></div>
+      <div
+        hx-ext="sse"
+        x-bind:sse-connect="sseUrl"
+        sse-swap="count"
+        id="countdown"
+      ></div>
+    </template>
+  </body>
+</html>
