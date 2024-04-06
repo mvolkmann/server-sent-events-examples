@@ -1,15 +1,9 @@
-# bun-websockets
+# countdown-sse-with-htmx
 
-To install dependencies:
+To run this:
 
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.0.24. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+- Enter `bun install`
+- Enter `bun run dev`
+- Browse localhost:3000
+- Open the DevTools and click the Network tab
+- See the Headers and EventStream sub-tabs.
