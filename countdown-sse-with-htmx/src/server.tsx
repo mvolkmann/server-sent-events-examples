@@ -19,6 +19,7 @@ app.get('/start', (c: Context) => {
 app.get('/countdown', (c: Context) => {
   return streamSSE(c, async stream => {
     while (true) {
+      // console.log('number =', number);
       if (number >= 0) {
         const jsx = <div>{number}</div>;
         await stream.writeSSE({
